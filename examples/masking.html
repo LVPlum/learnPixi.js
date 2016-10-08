@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script src="../pixi.js/pixi.js"></script>
+    <script>
+        var renderer = PIXI.autoDetectRenderer(800, 600, { antialias: true });
+        document.body.appendChild(renderer.view);
+
+        // create the root of the scene graph
+        var stage = new PIXI.Container();
+
+        stage.interactive = true;
+
+        var bg = PIXI.Sprite.fromImage('images/all.png');
+
+        bg.anchor.x = 0.5;
+        bg.anchor.y = 0.5;
+        bg.scale.set(0.5,0.5);
+        bg.position.x = renderer.width / 2;
+        bg.position.y = renderer.height / 2;
+
+        stage.addChild(bg);
+
+        var container = new PIXI.Container();
+        container.position.x = renderer.width / 2;
+        container.position.y = renderer.height / 2;
+
+        // add a bunch of sprites
+
+
+        var panda =  PIXI.Sprite.fromImage('images/01.png');
+        panda.y=100;
+        panda.x = -10;
+        panda.anchor.set(0.5,0.5);
+        panda.scale.set(0.25,0.25);
+        panda.alpha = 1;
+        container.addChild(panda);
+
+        stage.addChild(container);
+
+        // let's create a moving shape
+
+        var thing = PIXI.Sprite.fromImage('images/skirt0.png');
+        thing.y=100;
+        thing.x=-10;
+        thing.scale.set(0.5,0.5);
+        thing.anchor.set(0.5,0.5);
+        container.addChild(thing);
+//        stage.addChild(thing);
+
+//        thing.position.x = renderer.width / 2;
+//        thing.position.y = renderer.height / 2;
+
+        console.log(thing.width);
+        container.mask = thing;
+
+        console.log(container.mask);
+        var count = 0;
+//        bg.interactive = true;
+        stage.on('click', onClick);
+        stage.on('tap', onClick);
+
+        function onClick()
+        {
+            if(!container.mask)
+            {
+                console.log(container.mask);
+                container.mask = thing;
+            }
+            else
+            {
+                console.log(container.mask);
+                container.mask = null;
+            }
+        }
+
+
+        animate();
+
+        function animate()
+        {
+
+           renderer.render(stage);
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>

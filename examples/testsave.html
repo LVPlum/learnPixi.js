@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="warp"></div>
+<button id="pic">保存到本地</button>
+<script src="../pixi.js/pixi.js"></script>
+<script>
+
+    //Aliases
+    var Container = PIXI.Container,
+      autoDetectRenderer = PIXI.autoDetectRenderer,
+      loader = PIXI.loader,
+      resources = PIXI.loader.resources,
+      TextureCache = PIXI.utils.TextureCache,
+      Texture = PIXI.Texture,
+      Sprite = PIXI.Sprite,
+      extract = PIXI.WebGLExtract;
+
+    var stage = new Container();
+    var renderer = PIXI.autoDetectRenderer(800, 600);
+    var texture = PIXI.Texture.fromImage('images/skirt1.png');
+    var skirt = new Sprite(texture);
+    var one= new Sprite.fromImage('images/01.png');
+
+    one.mask = skirt;
+    stage.addChild(one);
+    stage.addChild(skirt);
+    document.getElementById('warp').appendChild(renderer.view);
+
+    requestAnimationFrame(animate);
+    function animate(){
+        requestAnimationFrame(animate);
+
+        renderer.render(stage);
+    }
+    document.getElementById('pic').onclick = function(){
+        console.log(renderer);
+
+        var image = renderer.extract.base64(stage);
+        /*var img = renderer.extract.image(stage);
+        console.log(img);*/
+
+
+        downloadFile('pic',image);
+
+        //下载转化后的文件
+        function downloadFile(fileName, content){
+
+            var aLink = document.createElement('a');
+            var result = base64Img2Blob(content);
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错, 感谢 Barret Lee 的反馈
+            aLink.download = fileName;
+            aLink.href = URL.createObjectURL(result);
+            aLink.dispatchEvent(evt);
+        }
+        //将base64的数据转化
+        function base64Img2Blob(code){
+            var parts = code.split(';base64,');
+            var contentType = parts[0].split(':')[1];
+
+            /*由于一些网络通讯协议的限制,你必须使用 window.btoa() 方法对原数据进行编码后，
+            才能进行发送。接收方使用相当于 window.atob() 的方法对接受到的 base64 数据进行解码,得到原数据。
+            例如，发送某些含有 ASCII 码表中 0 到 31 之间的控制字符的数据。*/
+            var raw = window.atob(parts[1]);
+            var rawLength = raw.length;
+            var uInt8Array = new Uint8Array(rawLength);//大小
+            for (var i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            //Blob对象
+            var result = new Blob([uInt8Array], {type: contentType});
+            console.log(result);
+            return result;
+        }
+    }
+
+</script>
+</body>
+</html>

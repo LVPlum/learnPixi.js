@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        a{
+            border: 1px solid seagreen;
+            padding: 5px;
+            cursor: pointer;
+        }
+        canvas{
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+<a id="btnG">固定</a>
+<a id="btnF">分散</a>
+
+<script src="../pixi.js/pixi.js"></script>
+<script>
+    var renderer = PIXI.autoDetectRenderer(800, 600);
+    document.body.appendChild(renderer.view);
+
+    // create the root of the scene graph
+    var stage = new PIXI.Container();
+    var warp = new PIXI.Container();
+    warp.width=stage.width;
+    warp.height=stage.height;
+
+
+    // create a texture from an image path
+    var texture = PIXI.Texture.fromImage('images/cat.png');
+    var doorCache = PIXI.Texture.fromImage('images/door.png');
+
+    var cat,door,all;
+
+    cat = new PIXI.Sprite(texture);
+    door = new PIXI.Sprite(doorCache);
+    createBunny(cat,0,0);
+    createBunny(door,75,0);
+
+    function createBunny(name,x, y)
+    {
+        // enable the bunny to be interactive... this will allow it to respond to mouse and touch events
+        name.interactive = true;
+
+        // this button mode will mean the hand cursor appears when you roll over the bunny with your mouse
+        name.buttonMode = true;
+
+        // center the bunny's anchor point
+//        name.anchor.set(0.5);
+
+        // make it a bit bigger, so it's easier to grab
+//        name.scale.set(1);
+
+        // setup events
+        name
+        // events for drag start
+          .on('mousedown', onDragStart)
+          .on('touchstart', onDragStart)
+          // events for drag end
+          .on('mouseup', onDragEnd)
+          .on('mouseupoutside', onDragEnd)
+          .on('touchend', onDragEnd)
+          .on('touchendoutside', onDragEnd)
+          // events for drag move
+          .on('mousemove', onDragMove)
+          .on('touchmove', onDragMove);
+
+        // move the sprite to its designated position
+        name.position.x = x;
+        name.position.y = y;
+
+        // add it to the stage
+        stage.addChild(name);
+        /*stage.interactive = true;
+        stage.buttonMode = true;
+        stage
+          .on('mousedown', onDragStart)
+          .on('touchstart', onDragStart)
+          // events for drag end
+          .on('mouseup', onDragEnd)
+          .on('mouseupoutside', onDragEnd)
+          .on('touchend', onDragEnd)
+          .on('touchendoutside', onDragEnd)
+          // events for drag move
+          .on('mousemove', onDragMove)
+          .on('touchmove', onDragMove);
+        warp.addChild(stage);
+        console.log(stage);*/
+    }
+
+    requestAnimationFrame( animate );
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        // render the stage
+        renderer.render(stage);
+    }
+
+    function onDragStart(event)
+    {
+        // store a reference to the data
+        // the reason for this is because of multitouch
+        // we want to track the movement of this particular touch
+        this.data = event.data;
+        this.alpha = 0.5;
+        this.dragging = true;
+    }
+
+    function onDragEnd()
+    {
+        this.alpha = 1;
+
+        this.dragging = false;
+
+        // set the interaction data to null
+        this.data = null;
+    }
+
+    function onDragMove()
+    {
+        if (this.dragging)
+        {
+            console.log(this);
+            var newPosition = this.data.getLocalPosition(this.parent);
+            this.position.x = newPosition.x;
+            this.position.y = newPosition.y;
+            console.log(this.position.x);
+        }
+    }
+
+    var btnG = document.getElementById('btnG');
+    btnG.onclick = function(){
+        // add it to the stage
+        stage.interactive = true;
+        stage.buttonMode = true;
+        cat.interactive = false;
+        cat.buttonMode = false;
+        door.interactive = false;
+        door.buttonMode = false;
+        stage.x = cat.x>door.x ? door.x:cat.x;
+        stage.y = cat.y>door.y ? door.y:cat.y;
+        cat.x = Math.abs(cat.x-stage.x);
+        cat.y = Math.abs(cat.y-stage.y);
+        door.x = Math.abs(door.x-stage.x);
+        door.y = Math.abs(door.y-stage.y);
+        console.log(stage.x,stage.y,cat.x,cat.y,door.x,door.y);
+        stage
+          .on('mousedown', onDragStart)
+          .on('touchstart', onDragStart)
+          // events for drag end
+          .on('mouseup', onDragEnd)
+          .on('mouseupoutside', onDragEnd)
+          .on('touchend', onDragEnd)
+          .on('touchendoutside', onDragEnd)
+          // events for drag move
+          .on('mousemove', onDragMove)
+          .on('touchmove', onDragMove);
+        warp.addChild(stage);
+    }
+    var btnF = document.getElementById('btnF');
+    btnF.onclick = function(){
+        warp.removeChild(stage);
+        cat.x = cat.x+stage.x;
+        cat.y = cat.y+stage.y;
+        door.x = door.x + stage.x;
+        door.y = door.y + stage.y;
+        stage.x = 0;
+        stage.y = 0;
+        createBunny(cat,cat.x,cat.y);
+        createBunny(door,door.x,door.y);
+
+        console.log(stage.x,stage.y,cat.x,cat.y,door.x,door.y);
+    }
+</script>
+</body>
+</html>

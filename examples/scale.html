@@ -1,0 +1,55 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Grouping sprites</title>
+<body>
+<button id="btn">qweqwe</button>
+<script src="../pixi.js/pixi.js"></script>
+<script>
+
+    //Aliases
+    var Container = PIXI.Container,
+      autoDetectRenderer = PIXI.autoDetectRenderer,
+      loader = PIXI.loader,
+      resources = PIXI.loader.resources,
+      TextureCache = PIXI.utils.TextureCache,
+      Texture = PIXI.Texture,
+      Sprite = PIXI.Sprite;
+
+    //Create a Pixi stage and renderer and add the
+    //renderer.view to the DOM
+    var stage = new Container(),
+      renderer = autoDetectRenderer(512, 512);
+    document.body.appendChild(renderer.view);
+    var data = [{image: 'images/cat.png'}];
+    console.log(data[0].image);
+    var one = PIXI.Texture.fromImage(data[0].image)
+//    var one= new Sprite.fromImage(data[0].image);
+    var one1 = new Sprite(one);
+    stage.addChild(one1);
+
+    document.getElementById('btn').onclick = function(){
+
+        stage.width += 10;
+        stage.height +=10;
+//        stage.scale.set(1.5,3);
+
+        renderer.render(stage);
+    };
+
+    requestAnimationFrame(animate);
+
+    function animate(){
+        requestAnimationFrame(animate);
+
+        renderer.render(stage);
+    }
+
+
+
+
+
+</script>
+</body>
+
+
+

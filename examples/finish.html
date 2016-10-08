@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="../pixi.js/pixi.js"></script>
+<script>
+    //Aliases
+    var Container = PIXI.Container,
+      autoDetectRenderer = PIXI.autoDetectRenderer,
+      loader = PIXI.loader,
+      resources = PIXI.loader.resources,
+      TextureCache = PIXI.utils.TextureCache,
+      Texture = PIXI.Texture,
+      Sprite = PIXI.Sprite;
+
+    var stage = new Container(),
+      renderer = autoDetectRenderer(800,620);
+
+    document.body.appendChild(renderer.view);
+
+    loader
+      .add(["images/all.png","images/left.png","images/right.png","images/skirt0.png","images/skirt1.png","images/skirt2.png","images/01.png","images/01s.png","images/02.png"])
+      .load(setup)
+
+    function setup(){
+
+
+        var all = new Sprite(resources["images/all.png"].texture);
+        all.scale.set(0.5,0.5);
+        all.position.y = renderer.height/2-all.height/2;
+        all.position.x = all.width/2;
+        stage.addChild(all);
+
+        var btnOne = new Sprite(resources["images/01s.png"].texture);
+        btnOne.interactive = true;
+        btnOne.scale.set(0.5,0.5);
+        btnOne.position.x=renderer.width-btnOne.width-10;
+        btnOne.position.y=10;
+        stage.addChild(btnOne);
+        btnOne.on("click",cover);
+
+        var btnTwo = new Sprite(resources["images/02.png"].texture);
+        btnTwo.interactive = true;
+        btnTwo.scale.set(0.25,0.25);
+        btnTwo.position.x=renderer.width-btnTwo.width-10;
+        btnTwo.position.y = btnOne.height+20;
+        stage.addChild(btnTwo);
+        btnTwo.on("click",coverTwo);
+
+        var clothOne = new Sprite(resources["images/01.png"].texture);
+        clothOne.visible = false;
+        var clothTwo = new Sprite(resources["images/01.png"].texture);
+        clothTwo.visible = false;
+        var clothThree = new Sprite(resources["images/01.png"].texture);
+        clothThree.visible = false;
+
+        var clothOne02 = new Sprite(resources["images/02.png"].texture);
+        clothOne02.visible = false;
+        var clothTwo02 = new Sprite(resources["images/02.png"].texture);
+        clothTwo02.visible = false;
+        var clothThree02 = new Sprite(resources["images/02.png"].texture);
+        clothThree02.visible = false;
+
+        var skirt0 = new Sprite(resources["images/skirt0.png"].texture);
+        skirt0.scale.set(0.5,0.5);
+        skirt0.position.x = all.width/2 +skirt0.width/2-28;
+        skirt0.position.y = renderer.height/2+42;
+        console.log(skirt0.width,skirt0.height);
+
+        clothOne.position.x=skirt0.position.x;
+        clothOne.position.y = skirt0.position.y;
+        stage.addChild(skirt0);
+        stage.addChild(clothOne);
+        stage.addChild(clothOne02);
+
+
+        var skirt1 = new Sprite(resources["images/skirt1.png"].texture);
+        skirt1.scale.set(0.5,0.5);
+        skirt1.position.x = all.width/2+skirt1.width/2+10;
+        skirt1.position.y = all.height/2-30;
+
+        stage.addChild(skirt1);
+        stage.addChild(clothTwo);
+        stage.addChild(clothTwo02);
+
+        var skirt2 = new Sprite(resources["images/skirt2.png"].texture);
+        skirt2.scale.set(0.5,0.5);
+        skirt2.position.x = all.width/2+skirt2.width/2+45;
+        skirt2.position.y = all.height/2-skirt2.height-27;
+
+        stage.addChild(skirt2);
+        stage.addChild(clothThree);
+        stage.addChild(clothThree02);
+        function cover(){
+            console.log(1);
+            clothOne02.visible = false;
+            clothTwo02.visible = false;
+            clothThree02.visible = false;
+            clothOne.width=skirt0.width;
+            clothOne.height=skirt0.height;
+            clothOne.position.x=skirt0.position.x;
+            clothOne.position.y = skirt0.position.y;
+            clothOne.visible = true;
+            clothOne.mask = skirt0;
+
+            clothTwo.width=skirt1.width;
+            clothTwo.height=skirt1.height;
+            clothTwo.position.x=skirt1.position.x;
+            clothTwo.position.y=skirt1.position.y;
+            clothTwo.visible = true;
+            clothTwo.mask = skirt1;
+
+            clothThree.width=skirt2.width;
+            clothThree.height=skirt2.height;
+            clothThree.position.x=skirt2.position.x;
+            clothThree.position.y=skirt2.position.y;
+            clothThree.visible = true;
+            clothThree.mask = skirt2;
+
+            renderer.render(stage);
+        }
+
+        function coverTwo(){
+            console.log(1);
+            clothOne.visible = false;
+            clothTwo.visible = false;
+            clothThree.visible = false;
+
+            clothOne02.width=skirt0.width;
+            clothOne02.height=skirt0.height;
+            clothOne02.position.x=skirt0.position.x;
+            clothOne02.position.y = skirt0.position.y;
+            clothOne02.visible = true;
+            clothOne02.mask = skirt0;
+
+            clothTwo02.width=skirt1.width;
+            clothTwo02.height=skirt1.height;
+            clothTwo02.position.x=skirt1.position.x;
+            clothTwo02.position.y=skirt1.position.y;
+            clothTwo02.visible = true;
+            clothTwo02.mask = skirt1;
+
+            clothThree02.width=skirt2.width;
+            clothThree02.height=skirt2.height;
+            clothThree02.position.x=skirt2.position.x;
+            clothThree02.position.y=skirt2.position.y;
+            clothThree02.visible = true;
+            clothThree02.mask = skirt2;
+
+            renderer.render(stage);
+        }
+
+        var armLeft = new Sprite(resources["images/left.png"].texture);
+        armLeft.scale.set(0.5,0.5);
+        armLeft.position.x = all.position.x+armLeft.width/2+13;
+        armLeft.position.y = all.position.y+armLeft.height+6;
+
+        stage.addChild(armLeft);
+
+        var armRight = new Sprite(resources["images/right.png"].texture)
+        armRight.scale.set(0.5,0.5);
+        armRight.position.x = all.position.x+armRight.width+69;
+        armRight.position.y = all.position.y+armRight.height+10;
+
+        stage.addChild(armRight);
+
+        renderer.render(stage);
+    }
+
+
+</script>
+</body>
+</html>

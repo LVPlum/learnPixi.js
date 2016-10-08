@@ -1,0 +1,78 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Grouping sprites</title>
+<body>
+
+<script src="../pixi.js/pixi.js"></script>
+<script>
+
+    //Aliases
+    var Container = PIXI.Container,
+      autoDetectRenderer = PIXI.autoDetectRenderer,
+      loader = PIXI.loader,
+      resources = PIXI.loader.resources,
+      TextureCache = PIXI.utils.TextureCache,
+      Texture = PIXI.Texture,
+      Sprite = PIXI.Sprite;
+
+    //Create a Pixi stage and renderer and add the
+    //renderer.view to the DOM
+    var stage = new Container(),
+      renderer = autoDetectRenderer(512, 512);
+    document.body.appendChild(renderer.view);
+
+    //load a JSON file and run the `setup` function when it's done
+    loader
+      .add(["images/animals.json","images/treasureHunter.json"])
+      .load(setup);
+
+
+
+    function setup(){
+        var id = resources["images/animals.json"].textures;
+        var dungeonTexture = TextureCache["dungeon.png"];
+        dungeon = new Sprite(dungeonTexture);
+        stage.addChild(dungeon);
+
+        var cat = new Sprite(id["cat.png"]);
+        cat.visible = false;
+
+        var hedgehog = new Sprite(id["hedgehog.png"]);
+        hedgehog.visible = true;
+
+        var btn = new Sprite(id["hedgehog.png"]);
+        btn.position.set(400,400);
+
+        btn.interactive = true;
+        btn.on('mousedown', onDown);
+        btn.on('touchstart', onDown);
+
+
+        stage.addChild(cat);
+        stage.addChild(hedgehog);
+        stage.addChild(btn);
+        function onDown(){
+//            cat.position.x += 10;
+//            cat.position.y += 10;
+            if(!cat.visible){
+                cat.visible = true;
+                hedgehog.visible = false;
+            }else {
+                cat.visible = false;
+                hedgehog.visible = true;
+            }
+
+            renderer.render(stage);
+        }
+
+        renderer.render(stage);
+    }
+
+
+
+
+</script>
+</body>
+
+
+

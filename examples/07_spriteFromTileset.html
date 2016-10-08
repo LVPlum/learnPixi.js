@@ -1,0 +1,69 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Make a sprite from a tileset sub-image</title>
+<body>
+<script src="../pixi.js/pixi.js"></script>
+<script>
+//Aliases
+var Container = PIXI.Container,
+    autoDetectRenderer = PIXI.autoDetectRenderer,
+    loader = PIXI.loader,
+    TextureCache = PIXI.utils.TextureCache,
+    Sprite = PIXI.Sprite,
+    Rectangle = PIXI.Rectangle;
+//Create a Pixi stage and renderer and add the
+//renderer.view to the DOM
+var stage = new Container(),
+    renderer = autoDetectRenderer(256, 256);
+document.body.appendChild(renderer.view);
+//load an image and run the `setup` function when it's done
+loader
+  .add(["images/cat.png","images/tileset.png",])
+  .load(setup);
+
+function setup() {
+
+  //Create the `tileset` sprite from the texture
+  var texture = TextureCache["images/tileset.png"];
+  var texture2 = TextureCache["images/tileset.png"];
+  var textureRound = TextureCache["images/cat.png"];
+
+  //Create a rectangle object that defines the position and
+  //size of the sub-image you want to extract from the texture
+  //创建一个矩形对象,定义了子图像的位置和尺寸你想要提取的纹理
+  var rectangle = new Rectangle(192, 128, 64, 64);
+  var rectangle2 = new Rectangle(192, 192, 64, 64);
+  //Tell the texture to use that rectangular section
+  //告诉纹理使用矩形剖面
+  texture.frame = rectangle;
+  texture2.frame = rectangle2;
+//  textureRound.frame = round;
+  //Create the sprite from the texture
+  var rocket = new Sprite(texture);
+  var rocket2 = new Sprite(texture2);
+  var shan = new Sprite(textureRound);
+
+  //Position the rocket sprite on the canvas
+  rocket.x = 32;
+  rocket.y = 32;
+  rocket2.position.set(164,164);
+  shan.position.set(100,100);
+  //Optionally use `pivot` to move the sprite's x and y position
+  /*
+  rocket.pivot.set(32, 32);
+  rocket.rotation = 0.3;
+  console.log(rocket.position)
+  */
+
+  //Add the rocket to the stage
+  stage.addChild(rocket);
+  stage.addChild(rocket2);
+  stage.addChild(shan);
+
+  //Render the stage
+  renderer.render(stage);
+}
+</script>
+</body>
+
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="warp"></div>
+<button id="pic">保存到本地</button>
+<script src="../pixi.js/pixi.js"></script>
+<script>
+
+    //Aliases
+    var Container = PIXI.Container,
+      autoDetectRenderer = PIXI.autoDetectRenderer,
+      loader = PIXI.loader,
+      resources = PIXI.loader.resources,
+      TextureCache = PIXI.utils.TextureCache,
+      Texture = PIXI.Texture,
+      Sprite = PIXI.Sprite;
+
+    var stage = new Container(),
+      renderer = PIXI.autoDetectRenderer(800, 512);
+
+    var data = [{image:'images/01.png'},{image:'images/02.png'}];
+
+    var texture = PIXI.Texture.fromImage('images/skirt1.png');
+
+    document.getElementById('warp').appendChild(renderer.view);
+    var spacing = 400;
+    var count = [];
+    for(var i=0;i<data.length;i++){
+        var skirt = new Sprite(texture);
+        skirt.position.x = spacing*i;
+
+        var one= new Sprite.fromImage(data[i].image);
+
+        one.position.set(skirt.x,skirt.y);
+        console.log(skirt.width,skirt.height);
+
+        one.mask = skirt;
+        console.log(one,skirt);
+
+        stage.addChild(one);
+        stage.addChild(skirt);
+
+        console.log(renderer)
+        one.texture.baseTexture.on('loaded',function(){
+            renderer.render(stage);
+        });
+
+    }
+
+
+//    requestAnimationFrame(animate);
+//
+//    function animate(){
+//        requestAnimationFrame(animate);
+//
+//        renderer.render(stage);
+//    }
+
+
+    document.getElementById('pic').onclick = function(){
+
+        var image = renderer.view.toDataURL();
+
+        var w=window.open('about:blank','image from canvas');
+        w.document.write("<img src='"+image+"' alt='from canvas'/>");
+    }
+
+</script>
+</body>
+</html>

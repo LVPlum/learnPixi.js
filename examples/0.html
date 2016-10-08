@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script src="../pixi.js/pixi.js"></script>
+    <script>
+        var Container = PIXI.Container,
+          autoDetectRenderer = PIXI.autoDetectRenderer,
+          loader = PIXI.loader,
+          TextureCache = PIXI.utils.TextureCache,
+          resources = PIXI.loader.resources,
+          Sprite = PIXI.Sprite;
+
+        var stage = new Container(),
+          renderer = autoDetectRenderer();
+        document.body.appendChild(renderer.view);
+
+        loader
+          .add("images/test0.json")
+          .load(setup);
+
+        function setup(){
+            var id = PIXI.loader.resources["images/test0.json"].textures;
+
+            var item1 = new Sprite(id["sprite10-sheet0.png"]);
+            var item2 = new Sprite(id["sprite11-sheet0.png"]);
+            item2.position.x = item1.width;
+            var item3 = new Sprite(id["sprite12-sheet0.png"]);
+            item3.position.x = item2.width+item2.position.x;
+            var item4 = new Sprite(id["sprite13-sheet0.png"]);
+            item4.position.x = item3.width+item3.position.x;
+
+            var item5 = new Sprite(id["sprite14-sheet0.png"]);
+            item5.position.x = item4.width+item4.position.x;
+
+            var itme6 = new Sprite(id["sprite15-sheet0.png"]);
+            itme6.position.x = item5.width+item5.position.x;
+
+            var itme7 = new Sprite(id["sprite16-sheet0.png"]);
+            itme7.position.x = itme6.width+itme6.position.x;
+
+            var item8 = new Sprite(id["sprite18-sheet0.png"]);
+            itme8 = itme7.width+itme7.position.x;
+
+            var itme9 = new Sprite(id["sprite19-sheet0.png"]);
+            itme9 = itme8.width +itme8.position.x;
+            var itme10 = new Sprite(id["sprite2-sheet0.png"]);
+            var itme11 = new Sprite(id["sprite21-sheet0.png"]);
+            var itme12 = new Sprite(id["sprite6-sheet0.png"]);
+            var itme13 = new Sprite(id["sprite9-sheet0.png"]);
+            stage.addChild(item1);
+            stage.addChild(item2);
+            stage.addChild(item3);
+            stage.addChild(item4);
+            stage.addChild(item5);
+            stage.addChild(itme6);
+            stage.addChild(itme7);
+            stage.addChild(itme8);
+            stage.addChild(itme9);
+            stage.addChild(itme10);
+            stage.addChild(itme11);
+            stage.addChild(itme12);
+            stage.addChild(itme13);
+
+            renderer.render(stage);
+        }
+    </script>
+</body>
+</html>

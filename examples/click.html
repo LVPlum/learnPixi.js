@@ -1,0 +1,48 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Grouping sprites</title>
+<body>
+<script src="../pixi.js/pixi.js"></script>
+<script>
+
+    var renderer = PIXI.autoDetectRenderer(400, 400);
+    document.body.appendChild(renderer.view);
+
+    // create the root of the scene graph
+    var stage = new PIXI.Container();
+
+    var sprite = PIXI.Sprite.fromImage('images/cat.png');
+    var cat = PIXI.Sprite.fromImage('images/cat.png');
+    sprite.position.set(50,50);
+    sprite.interactive = true;
+    sprite.on('mousedown', onDown);
+    sprite.on('touchstart', onDown);
+
+    stage.addChild(sprite);
+
+    function onDown (eventData) {
+        console.log(1);
+        stage.addChild(cat);
+
+        cat.position.x += 10;
+        cat.position.y += 10;
+
+        sprite.position.x += 10;
+        sprite.position.y += 10;
+    }
+    // start animating
+    animate();
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        // render the root container
+        renderer.render(stage);
+    }
+
+</script>
+</body>
+
+
+
